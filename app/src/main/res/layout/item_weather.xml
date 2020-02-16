@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView_item_person"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_margin="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="@dimen/_60dp"
+            android:layout_height="@dimen/_60dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_20dp"
+            android:visibility="gone"
+            tools:src="@drawable/ic_profile" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/WeatherTheme.MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_toEndOf="@id/iv_profile"
+            android:text="@string/app_name"
+            android:textSize="@dimen/_18sp" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/WeatherTheme.TertiaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="date" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            style="@style/WeatherTheme.SecondaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_alignStart="@+id/tv_name"
+            android:layout_marginStart="@dimen/_2dp"
+            android:layout_marginTop="@dimen/_4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="description" />
+
+        <TextView
+            android:id="@+id/tv_temp_max"
+            style="@style/WeatherTheme.SecondaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_date"
+            android:layout_alignParentEnd="true"
+            android:text="30C"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_temp_min"
+            style="@style/WeatherTheme.SecondaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_temp_max"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_4dp"
+            android:text="21C"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

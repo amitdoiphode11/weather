@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="twitter_consumer_key" translatable="false">AZMYpcgaAwPXvpOmZQeK0uumJ</string>
+    <string name="twitter_consumer_secret" translatable="false">UyWtdFWZVLYdHuKiGM10HF78O0946WgR9n1aEax4fuqGrv2NxD</string>
+
+    <string name="google_map_key" translatable="false">AIzaSyAXQen7Upu7S1t9YxcZvzV3x3pmGvesZHE</string>
+
+    <string name="app_name">Weather</string>
+    <string name="default_error">Something went wrong, try again later.</string>
+    <string name="snackbar_internet_unavailable">Internet unavailable</string>
+    <string name="label_home">Home</string>
+    <string name="label_map">Map</string>
+    <string name="label_profile">Profile</string>
+    <string name="error_login">Login Unsuccessful</string>
+    <string name="success_login">Login Successful</string>
+    <string name="label_city_list">City List</string>
+    <string name="label_city_map">City Map</string>
+    <string name="label_logout">Logout</string>
+    <string name="label_metric">metric</string>
+    <string name="label_imperial">imperial</string>
+</resources>

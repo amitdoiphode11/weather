@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_bottom"
+    app:startDestination="@id/menu_bottom_home">
+
+
+    <fragment
+        android:id="@+id/menu_bottom_home"
+        android:name="com.test.weather.ui.home.list.WeatherListFragment"
+        android:label="@string/label_home"
+        tools:layout="@layout/weather_list_fragment" />
+    <fragment
+        android:id="@+id/menu_bottom_map"
+        android:name="com.test.weather.ui.home.map.WeatherMapFragment"
+        android:label="@string/label_map"
+        tools:layout="@layout/weather_map_fragment" />
+    <fragment
+        android:id="@+id/menu_bottom_profile"
+        android:name="com.test.weather.ui.home.profile.ProfileFragment"
+        android:label="@string/label_profile"
+        tools:layout="@layout/profile_fragment" />
+</navigation>

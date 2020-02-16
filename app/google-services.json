@@ -1,0 +1,196 @@
+{
+  "project_info": {
+    "project_number": "44908824225",
+    "firebase_url": "https://wedonate-84b1d.firebaseio.com",
+    "project_id": "wedonate-84b1d",
+    "storage_bucket": "wedonate-84b1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44908824225:android:8e62910d1454fb47",
+        "android_client_info": {
+          "package_name": "com.atomsindia.local"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44908824225-j3unsppvrp2hukm8e4q8gisj0o0l9jv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.atomsindia.local",
+            "certificate_hash": "1e73c78b848372ebba311ecfa9908f448c289e81"
+          }
+        },
+        {
+          "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYAOaa98RJVRgiVAlO5r6sicpEXUE-Hz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44908824225:android:71f7c40f2000c53b",
+        "android_client_info": {
+          "package_name": "com.eaglesoft.tracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44908824225-n0b93pr89hg1hpi962ur6dj28kof720b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eaglesoft.tracking",
+            "certificate_hash": "1e73c78b848372ebba311ecfa9908f448c289e81"
+          }
+        },
+        {
+          "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYAOaa98RJVRgiVAlO5r6sicpEXUE-Hz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44908824225:android:fd32e26419b50a19",
+        "android_client_info": {
+          "package_name": "com.eaglesofttech.wedonate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44908824225-c5h3tjsnju2a5032tdmad7qqi2kb7sj3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eaglesofttech.wedonate",
+            "certificate_hash": "a213200af9a843da63b28b2e46c6be255c35b937"
+          }
+        },
+        {
+          "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYAOaa98RJVRgiVAlO5r6sicpEXUE-Hz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44908824225:android:ee8d60fba6bfb511",
+        "android_client_info": {
+          "package_name": "com.eaglesofttech.wedonate.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44908824225-td4lkr9hhdlhdrfmjou9kt2u7vbvgqed.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eaglesofttech.wedonate.debug",
+            "certificate_hash": "8b6eecdaf2a4cdce59c20b084cf0506b3ba4c1bb"
+          }
+        },
+        {
+          "client_id": "44908824225-60uepd6k37ru1i9i4bji98m2h31m90k9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eaglesofttech.wedonate.debug",
+            "certificate_hash": "a213200af9a843da63b28b2e46c6be255c35b937"
+          }
+        },
+        {
+          "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYAOaa98RJVRgiVAlO5r6sicpEXUE-Hz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44908824225:android:5e55b2d06fdaf8dffbd2e0",
+        "android_client_info": {
+          "package_name": "com.test.weather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYAOaa98RJVRgiVAlO5r6sicpEXUE-Hz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44908824225-18v7hqqbpp5eds4j68p8351t38jqqnlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
