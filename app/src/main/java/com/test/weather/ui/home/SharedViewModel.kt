@@ -7,7 +7,6 @@ import com.test.weather.data.WeCurrentWeather
 import com.test.weather.data.WeWeekWeather
 
 class SharedViewModel : ViewModel() {
-    private var cityRepository = CityRepository()
     var weatherUnit: MutableLiveData<String>? = null
     var tabSelectedListener: MutableLiveData<String>? = null
 
@@ -16,12 +15,12 @@ class SharedViewModel : ViewModel() {
         tabSelectedListener?.value = "list"
     }
 
-    suspend fun getCityCurrentWeather(): LiveData<ArrayList<WeCurrentWeather>> {
-        return cityRepository.getCityWeather(weatherUnit?.value)
+    suspend fun getCityCurrentWeather(): LiveData<ArrayList<WeCurrentWeather>>? {
+        return null
     }
 
-    suspend fun getWeekWeather(city: String?): LiveData<WeWeekWeather> {
-        return cityRepository.getCityWeekWeather(city, weatherUnit?.value)
+    suspend fun getWeekWeather(city: String?): LiveData<WeWeekWeather>? {
+        return null
     }
 
     fun setUnit(units: String?) {

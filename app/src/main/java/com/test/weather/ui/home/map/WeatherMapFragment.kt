@@ -87,7 +87,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
         launch {
             //City weather list
             sharedViewModel.getCityCurrentWeather()
-                .observe(this@WeatherMapFragment, Observer { weCurrentList ->
+                ?.observe(this@WeatherMapFragment, Observer { weCurrentList ->
                     if (weCurrentList.isEmpty()) {
                         showError(R.string.default_error)
                     } else {
@@ -181,7 +181,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
         launch(coroutineContext) {
 
             //Week weather
-            sharedViewModel.getWeekWeather(marker?.title).observe(this@WeatherMapFragment,
+            sharedViewModel.getWeekWeather(marker?.title)?.observe(this@WeatherMapFragment,
                 Observer { weWeekWeather ->
                     if (weWeekWeather == null) {
                         showError(R.string.default_error)
