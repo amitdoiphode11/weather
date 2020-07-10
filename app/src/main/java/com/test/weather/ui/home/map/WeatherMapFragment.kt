@@ -1,5 +1,6 @@
 package com.test.weather.ui.home.map
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -33,7 +34,7 @@ import java.util.ArrayList
 import kotlin.coroutines.CoroutineContext
 
 
-class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallback,
+class WeatherMapFragment : BaseFragmentKotlin(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
 
     companion object {
@@ -41,13 +42,6 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
     }
 
     private var cityList: ArrayList<WeCurrentWeather>? = ArrayList()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    private val ioContext: CoroutineContext
-        get() = Dispatchers.IO + job
-
-    private lateinit var job: Job
 
     private var viewModel: WeatherMapViewModel? = null
     private lateinit var map: GoogleMap
@@ -55,11 +49,9 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        job = Job()
     }
 
     override fun onDestroy() {
-        job.cancel()
         super.onDestroy()
     }
 
@@ -152,7 +144,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
         setMarker(mMap)
     }
 
-    private fun moveCamera(mMap: GoogleMap?) = launch(coroutineContext) {
+    private fun moveCamera(mMap: GoogleMap?) {
         var lastLocation: Location? = null
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             lastLocation = location
@@ -177,7 +169,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
         )
     }
 
-    private fun setMarker(mMap: GoogleMap?) = launch(coroutineContext) {
+    private fun setMarker(mMap: GoogleMap?) {
         for (weCurrentWeather in cityList!!) {
             mMap?.addMarker(
                 MarkerOptions()
@@ -196,28 +188,28 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-        launch(coroutineContext) {
 
-            //Week weather
-            viewModel?.fetchWeekWeather(marker?.title);
 
-            viewModel?.getWeekWeather()?.observe(this@WeatherMapFragment,
-                Observer { weWeekWeather ->
-                    if (weWeekWeather == null) {
-                        showError(R.string.default_error)
-                    } else {
-                        map.setInfoWindowAdapter(
-                            weWeekWeather.data?.let {
-                                CustomMarkerInfoWindowView(
-                                    activity,
-                                    marker?.title,
-                                    it
-                                )
-                            }
-                        )
-                    }
-                })
-        }
+        //Week weather
+        viewModel?.fetchWeekWeather(marker?.title);
+
+        viewModel?.getWeekWeather()?.observe(this@WeatherMapFragment,
+            Observer { weWeekWeather ->
+                if (weWeekWeather == null) {
+                    showError(R.string.default_error)
+                } else {
+                    map.setInfoWindowAdapter(
+                        weWeekWeather.data?.let {
+                            CustomMarkerInfoWindowView(
+                                activity,
+                                marker?.title,
+                                it
+                            )
+                        }
+                    )
+                }
+            })
+
         return false
     }
 
