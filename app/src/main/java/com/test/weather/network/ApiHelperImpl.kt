@@ -17,7 +17,7 @@ class ApiHelperImpl(private val apiService: ApiService?) : ApiHelper {
         city: String?,
         employeeId: String?,
         units: String?
-    ): Response<WeWeekWeather?>? {
+    ): WeWeekWeather? {
         return apiService?.getWeekWeather(city, employeeId, units)
     }
 }

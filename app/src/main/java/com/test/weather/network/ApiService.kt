@@ -22,6 +22,6 @@ interface ApiService {
         @Query("q") city: String?,
         @Query("appid") employeeId: String?,
         @Query("units") units: String? = "metric"
-    ): Response<WeWeekWeather?>?
+    ): WeWeekWeather?
 
 }

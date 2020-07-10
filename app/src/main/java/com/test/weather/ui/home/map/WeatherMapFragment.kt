@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,9 +18,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.test.weather.R
 import com.test.weather.data.WeCurrentWeather
+import com.test.weather.network.ApiHelperImpl
+import com.test.weather.network.RetrofitBuilder
 import com.test.weather.ui.base.BaseFragmentKotlin
-import com.test.weather.ui.home.SharedViewModel
+import com.test.weather.ui.home.ViewModelFactory
 import com.test.weather.ui.home.map.marker.CustomMarkerInfoWindowView
+import com.test.weather.utils.api.Status
+import kotlinx.android.synthetic.main.weather_list_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,8 +49,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
 
     private lateinit var job: Job
 
-    private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var viewModel: WeatherMapViewModel
+    private var viewModel: WeatherMapViewModel? = null
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -81,25 +84,40 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(WeatherMapViewModel::class.java)
-        sharedViewModel = ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService))
+        ).get(WeatherMapViewModel::class.java)
+        viewModel?.fetchWeather()
+        apiCall()
+    }
 
-        launch {
-            //City weather list
-            sharedViewModel.getCityCurrentWeather()
-                ?.observe(this@WeatherMapFragment, Observer { weCurrentList ->
-                    if (weCurrentList.isEmpty()) {
-                        showError(R.string.default_error)
-                    } else {
+    private fun apiCall() {
+        viewModel?.fetchWeather()
+        viewModel?.getWeather()?.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    hideLoading()
+                    it.data?.let {
                         //Set Map marker
-                        cityList = weCurrentList
+                        cityList = it
                         setMarker(map)
                     }
-                })
 
+                }
+                Status.LOADING -> {
+                    showLoading()
 
-        }
+                }
+                Status.ERROR -> {
+                    //Handle Error
+                    hideLoading()
+
+                }
+            }
+        })
     }
+
 
     private fun bitmapDescriptorFromVector(
         context: Context,
@@ -165,8 +183,8 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
                 MarkerOptions()
                     .position(
                         LatLng(
-                            weCurrentWeather?.coord?.lat!!,
-                            weCurrentWeather?.coord?.lon!!
+                            weCurrentWeather.coord?.lat!!,
+                            weCurrentWeather.coord?.lon!!
                         )
                     )
                     .title(weCurrentWeather.name)
@@ -181,17 +199,21 @@ class WeatherMapFragment : BaseFragmentKotlin(), CoroutineScope, OnMapReadyCallb
         launch(coroutineContext) {
 
             //Week weather
-            sharedViewModel.getWeekWeather(marker?.title)?.observe(this@WeatherMapFragment,
+            viewModel?.fetchWeekWeather(marker?.title);
+
+            viewModel?.getWeekWeather()?.observe(this@WeatherMapFragment,
                 Observer { weWeekWeather ->
                     if (weWeekWeather == null) {
                         showError(R.string.default_error)
                     } else {
-                        map?.setInfoWindowAdapter(
-                            CustomMarkerInfoWindowView(
-                                activity,
-                                marker?.title,
-                                weWeekWeather
-                            )
+                        map.setInfoWindowAdapter(
+                            weWeekWeather.data?.let {
+                                CustomMarkerInfoWindowView(
+                                    activity,
+                                    marker?.title,
+                                    it
+                                )
+                            }
                         )
                     }
                 })

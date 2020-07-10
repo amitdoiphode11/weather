@@ -49,11 +49,11 @@ class WeatherListFragment : BaseFragmentKotlin(),
         viewModel =
             ViewModelProvider(this, ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService)))
                 .get(WeatherListViewModel::class.java)
-        viewModel?.fetchWeather()
     }
 
 
     private fun apiCall() {
+        viewModel?.fetchWeather()
         viewModel?.getWeather()?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -13,6 +14,8 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.test.weather.R
+import com.test.weather.network.ApiHelperImpl
+import com.test.weather.network.RetrofitBuilder
 import com.test.weather.ui.base.BaseActivityKotlin
 import com.test.weather.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_home.*
@@ -36,7 +39,10 @@ class HomeActivity : BaseActivityKotlin() {
     }
 
     override fun init() {
-        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService))
+        ).get(SharedViewModel::class.java)
 
         setSupportActionBar(toolbar)
 
