@@ -21,7 +21,6 @@ import com.test.weather.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivityKotlin() {
-    private var sharedViewModel: SharedViewModel? = null
     private lateinit var navController: NavController
 
     companion object {
@@ -39,11 +38,6 @@ class HomeActivity : BaseActivityKotlin() {
     }
 
     override fun init() {
-        sharedViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService))
-        ).get(SharedViewModel::class.java)
-
         setSupportActionBar(toolbar)
 
         //Getting the Navigation Controller
@@ -56,15 +50,6 @@ class HomeActivity : BaseActivityKotlin() {
         //Setting up the action bar
         NavigationUI.setupActionBarWithNavController(this, navController)
 
-
-        sharedViewModel?.tabSelectedListener?.observe(this, Observer {
-            when (it) {
-                "list" ->
-                    bottomNav.selectedItemId = R.id.menu_bottom_home
-                "map" ->
-                    bottomNav.selectedItemId = R.id.menu_bottom_map
-            }
-        })
     }
 
     override fun showLoading() {

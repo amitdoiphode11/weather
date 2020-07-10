@@ -15,9 +15,7 @@ class ViewModelFactory(private val apiHelper: ApiHelper?) : ViewModelProvider.Fa
         if (modelClass.isAssignableFrom(WeatherMapViewModel::class.java)) {
             return WeatherMapViewModel(apiHelper) as T
         }
-        if (modelClass.isAssignableFrom(SharedViewModel::class.java)) {
-            return SharedViewModel() as T
-        }
+
         throw IllegalArgumentException("Unknown class name")
     }
 }

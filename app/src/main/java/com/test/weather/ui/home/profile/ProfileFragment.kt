@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 import com.test.weather.R
 import com.test.weather.ui.base.BaseFragmentKotlin
-import com.test.weather.ui.home.SharedViewModel
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 class ProfileFragment : BaseFragmentKotlin(), View.OnClickListener,
@@ -18,14 +17,12 @@ class ProfileFragment : BaseFragmentKotlin(), View.OnClickListener,
     }
 
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var sharedViewModel: SharedViewModel
     override fun getFragmentLayout(): Int {
         return R.layout.profile_fragment
     }
 
     override fun initView(view: View) {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
         setUserDetails()
     }
 
@@ -41,12 +38,6 @@ class ProfileFragment : BaseFragmentKotlin(), View.OnClickListener,
 
     private fun getCheckedUnit(checkedId: Int) {
         when (checkedId) {
-            R.id.rb_metric -> {
-                sharedViewModel.setUnit(getString(R.string.label_metric))
-            }
-            R.id.rb_imperial -> {
-                sharedViewModel.setUnit(getString(R.string.label_imperial))
-            }
         }
     }
 
@@ -58,12 +49,6 @@ class ProfileFragment : BaseFragmentKotlin(), View.OnClickListener,
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.tv_list -> {
-                sharedViewModel.setTab("list")
-            }
-            R.id.tv_map -> {
-                sharedViewModel.setTab("map")
-            }
         }
     }
 
