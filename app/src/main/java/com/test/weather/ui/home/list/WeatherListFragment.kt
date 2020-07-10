@@ -39,21 +39,35 @@ class WeatherListFragment : BaseFragmentKotlin(),
         apiCall()
     }
 
+    private fun setUI() {
+        adapter = CityWeatherListAdapter(activity, this)
+        rv_weather.adapter = adapter
+        rv_weather.layoutManager = LinearLayoutManager(activity)
+    }
+
+    private fun initViewModel() {
+        viewModel =
+            ViewModelProvider(this, ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService)))
+                .get(WeatherListViewModel::class.java)
+        viewModel?.fetchWeather()
+    }
+
+
     private fun apiCall() {
         viewModel?.getWeather()?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    progressBar.visibility = View.GONE
+                    hideLoading()
                     it.data?.let { users -> renderList(users) }
                     rv_weather.visibility = View.VISIBLE
                 }
                 Status.LOADING -> {
-                    progressBar.visibility = View.VISIBLE
+                    showLoading()
                     rv_weather.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     //Handle Error
-                    progressBar.visibility = View.GONE
+                    hideLoading()
                     showError(it.message)
                 }
             }
@@ -65,23 +79,12 @@ class WeatherListFragment : BaseFragmentKotlin(),
         adapter?.notifyDataSetChanged()
     }
 
-
-    private fun setUI() {
-        adapter = CityWeatherListAdapter(activity, this)
-        rv_weather.adapter = adapter
-        rv_weather.layoutManager = LinearLayoutManager(activity)
-    }
-
-    private fun initViewModel() {
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService)))
-                .get(WeatherListViewModel::class.java)
-    }
-
     override fun showLoading() {
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
     override fun onItemClick(weCurrentWeather: WeCurrentWeather?, view: View?) {
