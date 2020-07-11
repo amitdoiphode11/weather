@@ -9,7 +9,6 @@ class BaseApplication : Application() {
         fun getInstance(): BaseApplication? {
             return getInstance()
         }
-
     }
 
     override fun onCreate() {
