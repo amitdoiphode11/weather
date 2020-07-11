@@ -1,7 +1,7 @@
-package com.test.weather.network
+package com.test.weather.data.api
 
-import com.test.weather.data.WeCurrentWeather
-import com.test.weather.data.WeWeekWeather
+import com.test.weather.data.model.WeCurrentWeather
+import com.test.weather.data.model.WeWeekWeather
 
 interface ApiHelper {
 

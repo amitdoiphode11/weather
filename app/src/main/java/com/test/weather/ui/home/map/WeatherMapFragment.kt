@@ -18,20 +18,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.test.weather.R
-import com.test.weather.data.WeCurrentWeather
-import com.test.weather.network.ApiHelperImpl
-import com.test.weather.network.RetrofitBuilder
+import com.test.weather.data.api.ApiHelperImpl
+import com.test.weather.data.api.RetrofitBuilder
+import com.test.weather.data.model.WeCurrentWeather
 import com.test.weather.ui.base.BaseFragmentKotlin
 import com.test.weather.ui.home.ViewModelFactory
 import com.test.weather.ui.home.map.marker.CustomMarkerInfoWindowView
 import com.test.weather.utils.api.Status
-import kotlinx.android.synthetic.main.weather_list_fragment.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.util.ArrayList
-import kotlin.coroutines.CoroutineContext
 
 
 class WeatherMapFragment : BaseFragmentKotlin(), OnMapReadyCallback,
@@ -144,6 +138,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), OnMapReadyCallback,
         setMarker(mMap)
     }
 
+    @SuppressLint("MissingPermission")
     private fun moveCamera(mMap: GoogleMap?) {
         var lastLocation: Location? = null
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->

@@ -6,9 +6,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.weather.R
-import com.test.weather.data.WeCurrentWeather
-import com.test.weather.network.ApiHelperImpl
-import com.test.weather.network.RetrofitBuilder
+import com.test.weather.data.api.ApiHelperImpl
+import com.test.weather.data.api.RetrofitBuilder
+import com.test.weather.data.model.WeCurrentWeather
 import com.test.weather.ui.base.BaseFragmentKotlin
 import com.test.weather.ui.home.ViewModelFactory
 import com.test.weather.ui.home.list.adapter.CityWeatherListAdapter

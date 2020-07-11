@@ -1,8 +1,7 @@
-package com.test.weather.network
+package com.test.weather.data.api
 
-import com.test.weather.data.WeCurrentWeather
-import com.test.weather.data.WeWeekWeather
-import retrofit2.Response
+import com.test.weather.data.model.WeCurrentWeather
+import com.test.weather.data.model.WeWeekWeather
 
 class ApiHelperImpl(private val apiService: ApiService?) : ApiHelper {
     override suspend fun getCurrentWeather(

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.weather.data.WeCurrentWeather
-import com.test.weather.network.ApiHelper
+import com.test.weather.data.api.ApiHelper
+import com.test.weather.data.model.WeCurrentWeather
 import com.test.weather.utils.api.Resource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
