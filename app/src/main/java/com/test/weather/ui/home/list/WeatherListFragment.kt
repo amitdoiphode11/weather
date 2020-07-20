@@ -9,6 +9,7 @@ import com.test.weather.R
 import com.test.weather.data.api.ApiHelperImpl
 import com.test.weather.data.api.RetrofitBuilder
 import com.test.weather.data.model.WeCurrentWeather
+import com.test.weather.data.reporsitory.WeatherRepository
 import com.test.weather.ui.base.BaseFragmentKotlin
 import com.test.weather.ui.home.ViewModelFactory
 import com.test.weather.ui.home.list.adapter.CityWeatherListAdapter
@@ -47,7 +48,10 @@ class WeatherListFragment : BaseFragmentKotlin(),
 
     private fun initViewModel() {
         viewModel =
-            ViewModelProvider(this, ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService)))
+            ViewModelProvider(
+                this,
+                ViewModelFactory(WeatherRepository(ApiHelperImpl(RetrofitBuilder.apiService)))
+            )
                 .get(WeatherListViewModel::class.java)
     }
 

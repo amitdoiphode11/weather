@@ -23,16 +23,21 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+        //buildConfigField 'String', 'BASE_LINK', "\"http://api.openweathermap.org/data/2.5/\""
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    flavorDimensions "tier"
+    productFlavors {
+        Production {
+            buildConfigField("String", "BASE_URL", baseUrl)
+        }
+        Stag {
+            buildConfigField("String", "BASE_URL", baseUrl)
+        }
     }
 
 }

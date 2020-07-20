@@ -2,8 +2,9 @@ package com.test.weather.data.api
 
 import com.test.weather.data.model.WeCurrentWeather
 import com.test.weather.data.model.WeWeekWeather
+import javax.inject.Inject
 
-class ApiHelperImpl(private val apiService: ApiService?) : ApiHelper {
+class ApiHelperImpl @Inject constructor(private val apiService: ApiService?) : ApiHelper {
     override suspend fun getCurrentWeather(
         city: String?,
         employeeId: String?,
