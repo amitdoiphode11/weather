@@ -21,7 +21,7 @@ import com.test.weather.R
 import com.test.weather.data.api.ApiHelperImpl
 import com.test.weather.data.api.RetrofitBuilder
 import com.test.weather.data.model.WeCurrentWeather
-import com.test.weather.data.reporsitory.WeatherRepository
+import com.test.weather.data.reporsitory.WeatherRepositoryImpl
 import com.test.weather.ui.base.BaseFragmentKotlin
 import com.test.weather.ui.home.ViewModelFactory
 import com.test.weather.ui.home.map.marker.CustomMarkerInfoWindowView
@@ -74,7 +74,7 @@ class WeatherMapFragment : BaseFragmentKotlin(), OnMapReadyCallback,
         viewModel = ViewModelProvider(
             this,
             ViewModelFactory(
-                WeatherRepository(ApiHelperImpl(RetrofitBuilder.apiService))
+                WeatherRepositoryImpl(ApiHelperImpl(RetrofitBuilder.apiService))
             )
         ).get(WeatherMapViewModel::class.java)
         viewModel?.fetchWeather()

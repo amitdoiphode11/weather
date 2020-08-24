@@ -1,94 +1,77 @@
 package com.test.weather.ui.home.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.weather.R
-import com.test.weather.data.api.ApiHelperImpl
-import com.test.weather.data.api.RetrofitBuilder
 import com.test.weather.data.model.WeCurrentWeather
-import com.test.weather.data.reporsitory.WeatherRepository
-import com.test.weather.ui.base.BaseFragmentKotlin
-import com.test.weather.ui.home.ViewModelFactory
 import com.test.weather.ui.home.list.adapter.CityWeatherListAdapter
-import com.test.weather.utils.api.Status
+import com.test.weather.utils.state.DataState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_list_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.lang.StringBuilder
 
-class WeatherListFragment : BaseFragmentKotlin(),
+
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
+class WeatherListFragment constructor(
+    private val someString: String
+) : Fragment(R.layout.weather_list_fragment),
     CityWeatherListAdapter.OutletItemClickListener {
 
-    private var adapter: CityWeatherListAdapter? = null
-    private var viewModel: WeatherListViewModel? = null
+    private val adapter: CityWeatherListAdapter? = null
+    private val viewModel: WeatherListViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        subscribeObservers()
+        viewModel.setState(WeatherListViewModel.MainStateEvent.GetWeatherList)
+
+        Log.d(TAG, "someString: ${someString}")
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun getFragmentLayout(): Int {
-        return R.layout.weather_list_fragment
-    }
-
-    override fun initView(view: View) {
-        setUI()
-        initViewModel()
-        apiCall()
-    }
-
-    private fun setUI() {
-        adapter = CityWeatherListAdapter(activity, this)
-        rv_weather.adapter = adapter
-        rv_weather.layoutManager = LinearLayoutManager(activity)
-    }
-
-    private fun initViewModel() {
-        viewModel =
-            ViewModelProvider(
-                this,
-                ViewModelFactory(WeatherRepository(ApiHelperImpl(RetrofitBuilder.apiService)))
-            )
-                .get(WeatherListViewModel::class.java)
-    }
-
-
-    private fun apiCall() {
-        viewModel?.fetchWeather()
-        viewModel?.getWeather()?.observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    hideLoading()
-                    it.data?.let { users -> renderList(users) }
-                    rv_weather.visibility = View.VISIBLE
+    private fun subscribeObservers() {
+        viewModel.getWeather().observe(viewLifecycleOwner, Observer { dataState ->
+            when (dataState) {
+                is DataState.Success<*> -> {
+                    displayProgressBar(false)
+                    setWeatherList(dataState.data as List<WeCurrentWeather>)
                 }
-                Status.LOADING -> {
-                    showLoading()
-                    rv_weather.visibility = View.GONE
+                is DataState.Error -> {
+                    displayProgressBar(false)
+                    displayError(dataState.exception.message)
                 }
-                Status.ERROR -> {
-                    //Handle Error
-                    hideLoading()
-                    showError(it.message)
+                is DataState.Loading -> {
+                    displayProgressBar(true)
                 }
             }
         })
     }
 
-    private fun renderList(weather: ArrayList<WeCurrentWeather>) {
-        adapter?.setList(weather)
-        adapter?.notifyDataSetChanged()
+    private fun displayError(message: String?) {
+        if (message != null) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Unknown error.", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    override fun showLoading() {
-        progressBar.visibility = View.VISIBLE
+    private fun setWeatherList(list: List<WeCurrentWeather>) {
+        val sb = StringBuilder()
+        for (blog in list) {
+            sb.append(blog.name + "\n")
+        }
+        Log.e(TAG, "setWeatherList: $sb")
+        //text.text = sb.toString()
     }
 
-    override fun hideLoading() {
-        progressBar.visibility = View.GONE
+    private fun displayProgressBar(isDisplayed: Boolean) {
+        progressBar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
     }
 
     override fun onItemClick(weCurrentWeather: WeCurrentWeather?, view: View?) {
@@ -97,6 +80,10 @@ class WeatherListFragment : BaseFragmentKotlin(),
 
     override fun onRetryClick() {
 
+    }
+
+    companion object {
+        private const val TAG = "WeatherListFragment"
     }
 
 

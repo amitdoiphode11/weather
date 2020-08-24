@@ -1,21 +1,22 @@
 package com.test.weather.data.reporsitory
 
-import com.test.weather.data.api.ApiHelper
-import javax.inject.Inject
+import com.test.weather.data.model.WeCurrentWeather
+import com.test.weather.data.model.WeWeekWeather
+import com.test.weather.utils.state.DataState
+import kotlinx.coroutines.flow.Flow
 
-class WeatherRepository @Inject constructor(private val apiHelper: ApiHelper) {
-
+interface WeatherRepository {
     suspend fun getCurrentWeather(
         city: String?,
         employeeId: String?,
         units: String? = "metric"
-    ) = apiHelper.getCurrentWeather(city, employeeId, units)
+    ): Flow<DataState<WeCurrentWeather?>?>
 
 
     suspend fun getWeekWeather(
         city: String?,
         employeeId: String?,
         units: String? = "metric"
-    ) = apiHelper.getWeekWeather(city, employeeId, units)
+    ): Flow<DataState<WeWeekWeather?>?>
 
 }

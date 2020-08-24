@@ -34,12 +34,11 @@ object ApplicationModule {
     @Provides
     @Singleton
     fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-        BASE_URL: String
+        okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
+            .baseUrl(provideBaseUrl())
             .client(okHttpClient)
             .build()
 

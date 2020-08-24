@@ -5,17 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.weather.data.api.ApiHelper
 import com.test.weather.data.model.WeCurrentWeather
 import com.test.weather.data.model.WeWeekWeather
-import com.test.weather.data.reporsitory.WeatherRepository
+import com.test.weather.data.reporsitory.WeatherRepositoryImpl
 import com.test.weather.ui.home.list.WeatherListViewModel
 import com.test.weather.utils.api.Resource
+import com.test.weather.utils.state.DataState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class WeatherMapViewModel @ViewModelInject constructor(private val weatherRepository: WeatherRepository?) :
+class WeatherMapViewModel @ViewModelInject constructor(private val weatherRepository: WeatherRepositoryImpl?) :
     ViewModel() {
     companion object {
         private val appId = "4017c85936fc42617cff4bc115dd2214"
@@ -34,27 +36,30 @@ class WeatherMapViewModel @ViewModelInject constructor(private val weatherReposi
     }
 
 
-    private val weekWeatherList = MutableLiveData<Resource<WeWeekWeather>>()
-    private val weatherList = MutableLiveData<Resource<ArrayList<WeCurrentWeather>>>()
+    private val _weekWeatherList = MutableLiveData<DataState<WeWeekWeather?>>()
+    private val _weatherList = MutableLiveData<DataState<ArrayList<WeCurrentWeather>>>()
 
+/*
     fun fetchWeekWeather(city: String?) {
         viewModelScope.launch {
-            weekWeatherList.postValue(Resource.loading(null))
+            */
+/*_weekWeatherList.postValue(Resource.loading(null))
             try {
                 coroutineScope {
                     val weatherResult =
-                        async { weatherRepository?.getWeekWeather(city, appId) }.await()
-                    weekWeatherList.postValue(Resource.success(weatherResult))
+                        async { weatherRepositoryImpl?.getWeekWeather(city, appId) }.await()
+                    _weekWeatherList.postValue(Resource.success(weatherResult))
                 }
             } catch (e: Exception) {
-                weekWeatherList.postValue(Resource.error("Something Went Wrong", null))
-            }
+                _weekWeatherList.postValue(Resource.error("Something Went Wrong", null))
+            }*//*
+
         }
     }
 
     fun fetchWeather() {
         viewModelScope.launch {
-            weatherList.postValue(Resource.loading(null))
+            _weatherList.postValue(Resource.loading(null))
             try {
                 coroutineScope {
                     val tempList = arrayListOf<WeCurrentWeather>()
@@ -64,22 +69,41 @@ class WeatherMapViewModel @ViewModelInject constructor(private val weatherReposi
                         weatherResult?.let { tempList.add(it) }
                     }
 
-                    weatherList.postValue(Resource.success(tempList))
+                    _weatherList.postValue(Resource.success(tempList))
                 }
             } catch (e: Exception) {
-                weatherList.postValue(Resource.error("Something Went Wrong", null))
+                _weatherList.postValue(Resource.error("Something Went Wrong", null))
+            }
+        }
+    }
+*/
+
+
+    fun getWeekWeather(): LiveData<DataState<WeWeekWeather?>> {
+        return _weekWeatherList
+    }
+
+
+    fun getWeather(): LiveData<DataState<ArrayList<WeCurrentWeather>>> {
+        return _weatherList
+    }
+
+    fun setStateEvent(mainStateEvent: MainStateEvent?, city: String?) {
+        viewModelScope.launch {
+            when (mainStateEvent) {
+                is MainStateEvent.GetWeekWeatherList -> {
+                    weatherRepository?.getWeekWeather(city, appId)
+                        ?.onEach { dataState -> _weekWeatherList.value = dataState }
+                        ?.launchIn(viewModelScope)
+                }
             }
         }
     }
 
+    sealed class MainStateEvent {
 
-    fun getWeekWeather(): LiveData<Resource<WeWeekWeather>> {
-        return weekWeatherList
+        object GetWeekWeatherList : MainStateEvent()
+
+        object None : MainStateEvent()
     }
-
-
-    fun getWeather(): LiveData<Resource<ArrayList<WeCurrentWeather>>> {
-        return weatherList
-    }
-
 }
