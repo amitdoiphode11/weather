@@ -8,17 +8,17 @@
 
     <fragment
         android:id="@+id/menu_bottom_home"
-        android:name="com.test.weather.ui.home.list.WeatherListFragment"
+        android:name="com.test.weather.framework.ui.home.list.WeatherListFragment"
         android:label="@string/label_home"
         tools:layout="@layout/weather_list_fragment" />
     <fragment
         android:id="@+id/menu_bottom_map"
-        android:name="com.test.weather.ui.home.map.WeatherMapFragment"
+        android:name="com.test.weather.framework.ui.home.map.WeatherMapFragment"
         android:label="@string/label_map"
         tools:layout="@layout/weather_map_fragment" />
     <fragment
         android:id="@+id/menu_bottom_profile"
-        android:name="com.test.weather.ui.home.profile.ProfileFragment"
+        android:name="com.test.weather.framework.ui.home.profile.ProfileFragment"
         android:label="@string/label_profile"
         tools:layout="@layout/profile_fragment" />
 </navigation>
