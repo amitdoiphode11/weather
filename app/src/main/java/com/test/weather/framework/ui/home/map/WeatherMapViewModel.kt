@@ -5,15 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.weather.business.data.model.WeCurrentWeather
-import com.test.weather.business.data.model.WeWeekWeather
-import com.test.weather.business.data.reporsitory.WeatherRepositoryImpl
-import com.test.weather.business.utils.state.DataState
+import com.test.weather.framework.datasource.network.model.WeCurrentWeather
+import com.test.weather.framework.datasource.network.model.WeWeekWeather
+import com.test.weather.business.domain.utils.state.DataState
+import com.test.weather.business.interactors.GetWeather
+import com.test.weather.framework.ui.home.list.WeatherListViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class WeatherMapViewModel @ViewModelInject constructor(private val weatherRepository: WeatherRepositoryImpl?) :
+class WeatherMapViewModel @ViewModelInject constructor(private val getWeather: GetWeather?) :
     ViewModel() {
     companion object {
         private val appId = "4017c85936fc42617cff4bc115dd2214"
@@ -31,64 +32,21 @@ class WeatherMapViewModel @ViewModelInject constructor(private val weatherReposi
         )
     }
 
+    private val _weatherList = MutableLiveData<DataState<MutableList<WeCurrentWeather?>?>>()
+    fun getWeather(): LiveData<DataState<MutableList<WeCurrentWeather?>?>> {
+        return _weatherList
+    }
 
     private val _weekWeatherList = MutableLiveData<DataState<WeWeekWeather?>>()
-    private val _weatherList = MutableLiveData<DataState<ArrayList<WeCurrentWeather>>>()
-
-/*
-    fun fetchWeekWeather(city: String?) {
-        viewModelScope.launch {
-            */
-/*_weekWeatherList.postValue(Resource.loading(null))
-            try {
-                coroutineScope {
-                    val weatherResult =
-                        async { weatherRepositoryImpl?.getWeekWeather(city, appId) }.await()
-                    _weekWeatherList.postValue(Resource.success(weatherResult))
-                }
-            } catch (e: Exception) {
-                _weekWeatherList.postValue(Resource.error("Something Went Wrong", null))
-            }*//*
-
-        }
-    }
-
-    fun fetchWeather() {
-        viewModelScope.launch {
-            _weatherList.postValue(Resource.loading(null))
-            try {
-                coroutineScope {
-                    val tempList = arrayListOf<WeCurrentWeather>()
-                    for (city in WeatherListViewModel.cityList) {
-                        val weatherResult =
-                            async { weatherRepository?.getCurrentWeather(city, appId) }.await()
-                        weatherResult?.let { tempList.add(it) }
-                    }
-
-                    _weatherList.postValue(Resource.success(tempList))
-                }
-            } catch (e: Exception) {
-                _weatherList.postValue(Resource.error("Something Went Wrong", null))
-            }
-        }
-    }
-*/
-
-
     fun getWeekWeather(): LiveData<DataState<WeWeekWeather?>> {
         return _weekWeatherList
     }
 
-
-    fun getWeather(): LiveData<DataState<ArrayList<WeCurrentWeather>>> {
-        return _weatherList
-    }
-
-    fun setStateEvent(mainStateEvent: MainStateEvent?, city: String?) {
+    fun setWeekStateEvent(mainStateEvent: MainStateEvent?, city: String?) {
         viewModelScope.launch {
             when (mainStateEvent) {
                 is MainStateEvent.GetWeekWeatherList -> {
-                    weatherRepository?.getWeekWeather(city, appId)
+                    getWeather?.getWeekWeather(city, appId)
                         ?.onEach { dataState -> _weekWeatherList.value = dataState }
                         ?.launchIn(viewModelScope)
                 }
@@ -96,7 +54,31 @@ class WeatherMapViewModel @ViewModelInject constructor(private val weatherReposi
         }
     }
 
+    fun setState(mainStateEvent: MainStateEvent?) {
+        viewModelScope.launch {
+            when (mainStateEvent) {
+                is MainStateEvent.GetWeatherList -> {
+                    val tempList: MutableList<WeCurrentWeather?> = arrayListOf()
+                    for (city in cityList) {
+                        getWeather?.getCurrentWeather(city, appId)
+                            ?.onEach {
+                                when (it) {
+                                    is DataState.Success -> {
+                                        tempList.add(it.data)
+                                    }
+                                }
+                            }?.launchIn(viewModelScope)
+                    }
+                    _weatherList.postValue(DataState.Success(tempList))
+
+                }
+            }
+        }
+    }
+
     sealed class MainStateEvent {
+
+        object GetWeatherList : MainStateEvent()
 
         object GetWeekWeatherList : MainStateEvent()
 

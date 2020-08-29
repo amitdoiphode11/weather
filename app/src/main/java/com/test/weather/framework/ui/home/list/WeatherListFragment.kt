@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.test.weather.R
-import com.test.weather.business.data.model.WeCurrentWeather
+import com.test.weather.framework.datasource.network.model.WeCurrentWeather
 import com.test.weather.framework.ui.home.list.adapter.CityWeatherListAdapter
-import com.test.weather.business.utils.state.DataState
+import com.test.weather.business.domain.utils.state.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_list_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

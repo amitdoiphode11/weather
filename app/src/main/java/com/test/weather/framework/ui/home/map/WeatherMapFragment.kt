@@ -6,10 +6,13 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,95 +21,105 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.test.weather.R
-import com.test.weather.business.data.api.ApiHelperImpl
-import com.test.weather.business.data.api.RetrofitBuilder
-import com.test.weather.business.data.model.WeCurrentWeather
-import com.test.weather.business.data.reporsitory.WeatherRepositoryImpl
-import com.test.weather.framework.ui.base.BaseFragmentKotlin
-import com.test.weather.framework.ui.home.ViewModelFactory
+import com.test.weather.business.domain.utils.state.DataState
+import com.test.weather.framework.datasource.network.model.WeCurrentWeather
+import com.test.weather.framework.datasource.network.model.WeWeekWeather
 import com.test.weather.framework.ui.home.map.marker.CustomMarkerInfoWindowView
-import com.test.weather.business.utils.api.Status
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.weather_list_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.lang.StringBuilder
 import java.util.ArrayList
 
 
-class WeatherMapFragment : BaseFragmentKotlin(), OnMapReadyCallback,
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
+class WeatherMapFragment constructor(
+    private val someString: String
+) : Fragment(R.layout.weather_map_fragment), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
 
     companion object {
-        fun newInstance() = WeatherMapFragment()
+        private const val TAG = "WeatherMapFragment"
     }
 
     private var cityList: ArrayList<WeCurrentWeather>? = ArrayList()
 
-    private var viewModel: WeatherMapViewModel? = null
+    private val viewModel: WeatherMapViewModel by viewModels()
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun getFragmentLayout(): Int {
-        return R.layout.weather_map_fragment
-    }
-
-    override fun showLoading() {
-    }
-
-    override fun hideLoading() {
-    }
-
-    override fun initView(view: View) {
-        initViewModel()
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        subscribeObservers()
+        viewModel.setState(WeatherMapViewModel.MainStateEvent.GetWeatherList)
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map_city) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
+        Log.d(TAG, "someString: ${someString}")
     }
 
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(
-                WeatherRepositoryImpl(ApiHelperImpl(RetrofitBuilder.apiService))
-            )
-        ).get(WeatherMapViewModel::class.java)
-        viewModel?.fetchWeather()
-        apiCall()
-    }
-
-    private fun apiCall() {
-        viewModel?.fetchWeather()
-        viewModel?.getWeather()?.observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    hideLoading()
-                    it.data?.let {
-                        //Set Map marker
-                        cityList = it
-                        setMarker(map)
-                    }
-
+    private fun subscribeObservers() {
+        viewModel.getWeather().observe(viewLifecycleOwner, Observer { dataState ->
+            when (dataState) {
+                is DataState.Success<*> -> {
+                    displayProgressBar(false)
+                    setWeatherList(dataState.data as List<WeCurrentWeather>)
                 }
-                Status.LOADING -> {
-                    showLoading()
-
+                is DataState.Error -> {
+                    displayProgressBar(false)
+                    displayError(dataState.exception.message)
                 }
-                Status.ERROR -> {
-                    //Handle Error
-                    hideLoading()
-
+                is DataState.Loading -> {
+                    displayProgressBar(true)
                 }
             }
         })
     }
 
+    private fun subscribeWeekWeatherObservers(marker: Marker?) {
+        viewModel.getWeekWeather().observe(viewLifecycleOwner, Observer { dataState ->
+            when (dataState) {
+                is DataState.Success<*> -> {
+                    displayProgressBar(false)
+                    setWeekWeatherList(marker, dataState.data as WeWeekWeather?)
+                }
+                is DataState.Error -> {
+                    displayProgressBar(false)
+                    displayError(dataState.exception.message)
+                }
+                is DataState.Loading -> {
+                    displayProgressBar(true)
+                }
+            }
+        })
+    }
+
+    private fun displayError(message: String?) {
+        if (message != null) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Unknown error.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setWeatherList(list: List<WeCurrentWeather>) {
+        val sb = StringBuilder()
+        for (blog in list) {
+            sb.append(blog.name + "\n")
+        }
+        Log.e(TAG, "setWeatherList: $sb")
+
+        //Set Map marker
+        cityList = list as ArrayList<WeCurrentWeather>
+        setMarker(map)
+    }
+
+    private fun displayProgressBar(isDisplayed: Boolean) {
+        progressBar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
+    }
 
     private fun bitmapDescriptorFromVector(
         context: Context,
@@ -186,29 +199,28 @@ class WeatherMapFragment : BaseFragmentKotlin(), OnMapReadyCallback,
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-
-
         //Week weather
-        viewModel?.fetchWeekWeather(marker?.title);
-
-        viewModel?.getWeekWeather()?.observe(this@WeatherMapFragment,
-            Observer { weWeekWeather ->
-                if (weWeekWeather == null) {
-                    showError(R.string.default_error)
-                } else {
-                    map.setInfoWindowAdapter(
-                        weWeekWeather.data?.let {
-                            CustomMarkerInfoWindowView(
-                                activity,
-                                marker?.title,
-                                it
-                            )
-                        }
-                    )
-                }
-            })
-
+        viewModel.setWeekStateEvent(
+            WeatherMapViewModel.MainStateEvent.GetWeekWeatherList,
+            marker?.title
+        );
+        subscribeWeekWeatherObservers(marker)
         return false
+    }
+
+    private fun setWeekWeatherList(
+        marker: Marker?,
+        weWeekWeather: WeWeekWeather?
+    ) {
+        map.setInfoWindowAdapter(
+            weWeekWeather?.let {
+                CustomMarkerInfoWindowView(
+                    activity,
+                    marker?.title,
+                    weWeekWeather
+                )
+            }
+        )
     }
 
 

@@ -1,8 +1,8 @@
 package com.test.weather.framework.ui.home.profile
 
-import androidx.lifecycle.ViewModelProviders
 import android.view.View
 import android.widget.RadioGroup
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 
 import com.test.weather.R
@@ -22,7 +22,7 @@ class ProfileFragment : BaseFragmentKotlin(), View.OnClickListener,
     }
 
     override fun initView(view: View) {
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         setUserDetails()
     }
 

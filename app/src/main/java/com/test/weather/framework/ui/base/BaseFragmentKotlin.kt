@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.test.weather.R
-import com.test.weather.business.utils.NetworkUtils
+import com.test.weather.business.domain.utils.NetworkUtils
 
 abstract class BaseFragmentKotlin : Fragment() {
 
@@ -79,13 +79,13 @@ abstract class BaseFragmentKotlin : Fragment() {
     fun showSnackBar(message: String, @ColorRes textColor: Int) {
         if (activity != null && context != null && isAdded) {
             val snackbar = Snackbar.make(
-                activity!!.findViewById(android.R.id.content),
+                requireActivity().findViewById(android.R.id.content),
                 message, Snackbar.LENGTH_SHORT
             )
             val sbView = snackbar.view
             val textView =
-                sbView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            textView.setTextColor(ContextCompat.getColor(context!!, textColor))
+                sbView.findViewById<TextView>(R.id.snackbar_text)
+            textView.setTextColor(ContextCompat.getColor(requireContext(), textColor))
             snackbar.show()
         }
     }

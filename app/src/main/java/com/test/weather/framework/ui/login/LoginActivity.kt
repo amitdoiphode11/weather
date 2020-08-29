@@ -11,7 +11,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.test.weather.R
 import com.test.weather.framework.ui.home.HomeActivity
-import com.test.weather.business.utils.constant.IntentConstant.RC_SIGN_IN
+import com.test.weather.business.domain.utils.constant.IntentConstant.RC_SIGN_IN
 
 class LoginActivity : AppCompatActivity() {
 

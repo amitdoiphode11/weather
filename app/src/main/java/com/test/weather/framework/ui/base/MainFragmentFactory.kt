@@ -3,6 +3,7 @@ package com.test.weather.framework.ui.base
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.test.weather.framework.ui.home.list.WeatherListFragment
+import com.test.weather.framework.ui.home.map.WeatherMapFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -18,6 +19,11 @@ constructor(
 
             WeatherListFragment::class.java.name -> {
                 val fragment = WeatherListFragment(someString)
+                fragment
+            }
+
+            WeatherMapFragment::class.java.name -> {
+                val fragment = WeatherMapFragment(someString)
                 fragment
             }
 

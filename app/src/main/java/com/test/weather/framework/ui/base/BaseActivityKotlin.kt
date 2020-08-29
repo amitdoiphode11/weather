@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.test.weather.R
-import com.test.weather.business.utils.NetworkUtils
+import com.test.weather.business.domain.utils.NetworkUtils
 
 abstract class BaseActivityKotlin : AppCompatActivity() {
 
@@ -119,7 +119,7 @@ abstract class BaseActivityKotlin : AppCompatActivity() {
             message, Snackbar.LENGTH_SHORT
         )
         val sbView = snackbar.view
-        val textView = sbView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        val textView = sbView.findViewById<TextView>(R.id.snackbar_text)
         textView.setTextColor(ContextCompat.getColor(this, textColor))
         snackbar.show()
     }

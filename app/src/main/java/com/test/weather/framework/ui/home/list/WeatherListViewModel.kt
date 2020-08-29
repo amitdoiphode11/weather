@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.weather.business.data.model.WeCurrentWeather
-import com.test.weather.business.data.reporsitory.WeatherRepositoryImpl
-import com.test.weather.business.utils.state.DataState
+import com.test.weather.framework.datasource.network.model.WeCurrentWeather
+import com.test.weather.business.domain.utils.state.DataState
+import com.test.weather.business.interactors.GetWeather
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class WeatherListViewModel
 @ViewModelInject
 constructor(
-    private val weatherRepositoryImpl: WeatherRepositoryImpl?
+    private val getWeather: GetWeather?
 ) : ViewModel() {
 
     companion object {
@@ -44,27 +44,25 @@ constructor(
 
 
     fun setState(mainStateEvent: MainStateEvent?) {
-        when (mainStateEvent) {
-            is MainStateEvent.GetWeatherList -> {
-                viewModelScope.launch {
+        viewModelScope.launch {
+            when (mainStateEvent) {
+                is MainStateEvent.GetWeatherList -> {
                     val tempList: MutableList<WeCurrentWeather?> = arrayListOf()
                     for (city in cityList) {
-                        weatherRepositoryImpl?.getCurrentWeather(city, appId)
+                        getWeather?.getCurrentWeather(city, appId)
                             ?.onEach {
                                 when (it) {
                                     is DataState.Success -> {
                                         tempList.add(it.data)
                                     }
                                 }
-
-                            }
-                            ?.launchIn(viewModelScope)
+                            }?.launchIn(viewModelScope)
                     }
                     _weatherList.postValue(DataState.Success(tempList))
+
                 }
             }
         }
-
     }
 
     sealed class MainStateEvent {

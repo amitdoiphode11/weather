@@ -1,7 +1,7 @@
-package com.test.weather.di.module
+package com.test.weather.di
 
 import androidx.fragment.app.FragmentFactory
-import com.codingwithmitch.daggerhiltplayground.framework.presentation.MainFragmentFactory
+import com.test.weather.framework.ui.home.MainFragmentFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

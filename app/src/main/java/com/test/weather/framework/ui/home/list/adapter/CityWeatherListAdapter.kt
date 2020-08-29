@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.test.weather.R
-import com.test.weather.business.data.model.WeCurrentWeather
+import com.test.weather.framework.datasource.network.model.WeCurrentWeather
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_weather.view.*
 import java.util.*

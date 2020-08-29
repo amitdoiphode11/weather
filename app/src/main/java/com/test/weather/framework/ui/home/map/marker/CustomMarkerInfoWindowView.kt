@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.model.Marker
 import com.test.weather.R
-import com.test.weather.business.data.model.WeCurrentWeather
-import com.test.weather.business.data.model.WeWeekWeather
+import com.test.weather.framework.datasource.network.model.WeCurrentWeather
+import com.test.weather.framework.datasource.network.model.WeWeekWeather
 import com.test.weather.framework.ui.home.map.marker.adapter.WeekWeatherListAdapter
 import kotlinx.android.synthetic.main.item_info_window.view.*
 
